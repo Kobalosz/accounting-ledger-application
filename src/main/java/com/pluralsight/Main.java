@@ -4,6 +4,9 @@ package com.pluralsight;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() {
-        
+        boolean isRunning = true;
+        while(isRunning){
+
+        }
     }
 }
