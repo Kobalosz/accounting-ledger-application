@@ -2,6 +2,8 @@ package views;
 import com.pluralsight.UI;
 
 public class HomeScreen {
+
+
     public static String renderScreen() {
         IO.println("==============================================");
         IO.println("--=========== Welcome to Budgie! ===========--");
