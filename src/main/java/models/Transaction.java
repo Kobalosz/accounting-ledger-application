@@ -60,7 +60,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-//    Ran into a problem displaying the information so I had to create a method
+//    Ran into a problem displaying the information, so I had to create a method
 @Override
 public String toString() {
     String amountColor = amount > 0 ? Colors.BG_GREEN : Colors.RED;
