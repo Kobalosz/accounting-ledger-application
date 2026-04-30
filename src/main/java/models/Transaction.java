@@ -1,4 +1,6 @@
-package com.pluralsight;
+package models;
+
+import util.Colors;
 
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -59,8 +61,19 @@ public class Transaction {
     }
 
 //    Ran into a problem displaying the information so I had to create a method
-    @Override
-    public String toString(){
-        return date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
-    }
+@Override
+public String toString() {
+    String amountColor = amount > 0 ? Colors.BG_GREEN : Colors.RED;
+    String sign        = amount > 0 ? "+" : "";
+
+    return String.format("%-12s|%-10s|%-20s|%-15s|%s%s%.2f%s",
+            date,
+            time,
+            description,
+            vendor,
+            amountColor,
+            sign,
+            amount,
+            Colors.RESET);
+}
 }

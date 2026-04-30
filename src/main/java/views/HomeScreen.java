@@ -1,9 +1,9 @@
 package views;
 
-import com.pluralsight.Transaction;
+import models.Transaction;
 import com.pluralsight.UI;
 import repository.TransactionRepository;
-import views.LedgerScreen;
+import util.Colors;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,22 +22,20 @@ public class HomeScreen {
         boolean isRunning = true;
 
         while (isRunning) {
-          IO.println("D - Deposit");
-          IO.println("P - Payment");
-          IO.println("L - Ledger");
-          IO.println("X - Exit");
+            Display.showAppHeader();
+            Display.showHomeMenu();
 
             String input = UI.userInputString();
 
             switch (input) {
                 case "d" -> {
-                  IO.println("Enter description: ");
+                  Display.prompt("Enter Description: ");
                     String desc = UI.userInputString();
 
-                  IO.println("Enter vendor: ");
+                  Display.prompt("Enter Vendor: ");
                     String vendor = UI.userInputString();
 
-                  IO.println("Enter amount: ");
+                  Display.prompt("Enter Amount: ");
                     double amount = UI.userInputDouble();
 
                     Transaction t = new Transaction(
@@ -49,16 +47,16 @@ public class HomeScreen {
                     );
 
                     repo.save(t); // uses the injected repo
-                  IO.println("Deposit saved!");
+                  Display.showSuccess("Transaction Saved Successfully!");
                 }
                 case "p" -> {
-                  IO.println("Enter description: ");
+                  Display.prompt("Enter Description: ");
                     String desc = UI.userInputString();
 
-                  IO.println("Enter vendor: ");
+                  Display.prompt("Enter Vendor: ");
                     String vendor = UI.userInputString();
 
-                  IO.println("Enter amount: ");
+                  Display.prompt("Enter Amount: ");
                     double amount = UI.userInputDouble();
 
                     Transaction t = new Transaction(
@@ -70,13 +68,14 @@ public class HomeScreen {
                     );
 
                     repo.save(t);
-                  IO.println("Payment saved!");
+                  Display.prompt("Transaction Saved Successfully!");
                 }
                 case "l" -> {
                     LedgerScreen ledger = new LedgerScreen(repo);
                     ledger.display();
                 }
                 case "x" -> isRunning = false;
+                default -> Display.showError("Invalid Input, try again");
             }
         }
     }

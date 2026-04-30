@@ -1,0 +1,187 @@
+package views;
+
+import models.Transaction;
+import util.Colors;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+public class Display {
+
+    // ── Shared constants ───────────────────────────────────────────────────────
+    private static final int WIDTH       = 52;
+    private static final String DIVIDER  = Colors.CYAN + "  " + "═".repeat(WIDTH) + Colors.RESET;
+    private static final String THIN_DIV = Colors.DIM  + "  " + "─".repeat(WIDTH) + Colors.RESET;
+
+
+    //  Application header, idea from Sean Z.
+
+
+    public static void showAppHeader() {
+      IO.println();
+      IO.println(Colors.CYAN + Colors.BOLD +
+                "  ╔════════════════════════════════════════════════════╗\n" +
+                "  ║                                                    ║\n" +
+                "  ║    ░█████╗░░█████╗░░█████╗░░█████╗░██╗░░░██╗       ║\n" +
+                "  ║    ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██║░░░██║       ║\n" +
+                "  ║    ███████║██║░░╚═╝██║░░╚═╝██║░░██║██║░░░██║       ║\n" +
+                "  ║    ██╔══██║██║░░██╗██║░░██╗██║░░██║██║░░░██║       ║\n" +
+                "  ║    ██║░░██║╚█████╔╝╚█████╔╝╚█████╔╝╚██████╔╝       ║\n" +
+                "  ║    ╚═╝░░╚═╝░╚════╝░░╚════╝░░╚════╝░░╚═════╝        ║\n" +
+                "  ║                                                    ║\n" +
+                "  ║           A C C O U N T I N G  L E D G E R         ║\n" +
+                "  ║                    by IDK Tech                     ║\n" +
+                "  ║                                                    ║\n" +
+                "  ╚════════════════════════════════════════════════════╝"
+                + Colors.RESET);
+      IO.println();
+    }
+
+
+    //  Home screen
+
+
+    public static void showHomeMenu() {
+      IO.println(DIVIDER);
+      IO.println(Colors.bold("  MAIN MENU", Colors.YELLOW));
+      IO.println(DIVIDER);
+      IO.println(Colors.CYAN   + "  [D]" + Colors.WHITE  + "  Make a Deposit"  + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [P]" + Colors.WHITE  + "  Make a Payment"  + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [L]" + Colors.WHITE  + "  View Ledger"     + Colors.RESET);
+      IO.println(Colors.RED    + "  [X]" + Colors.WHITE  + "  Exit"            + Colors.RESET);
+      IO.println(THIN_DIV);
+      IO.print(Colors.YELLOW + Colors.BOLD + "  > " + Colors.RESET);
+    }
+
+
+    //  Ledger screen
+
+
+    public static void showLedgerMenu() {
+      IO.println(DIVIDER);
+      IO.println(Colors.bold("  LEDGER", Colors.YELLOW));
+      IO.println(DIVIDER);
+      IO.println(Colors.CYAN   + "  [A]" + Colors.WHITE  + "  All Transactions"     + Colors.RESET);
+      IO.println(Colors.GREEN  + "  [D]" + Colors.WHITE  + "  Deposits Only"         + Colors.RESET);
+      IO.println(Colors.RED    + "  [P]" + Colors.WHITE  + "  Payments Only"         + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [R]" + Colors.WHITE  + "  Reports & Search"      + Colors.RESET);
+      IO.println(Colors.YELLOW + "  [H]" + Colors.WHITE  + "  Back to Home"          + Colors.RESET);
+      IO.println(THIN_DIV);
+      IO.print(Colors.YELLOW + Colors.BOLD + "  > " + Colors.RESET);
+    }
+
+
+    //  reports and search screen
+
+
+    public static void showReportsMenu() {
+      IO.println(DIVIDER);
+      IO.println(Colors.bold("  REPORTS & SEARCH", Colors.YELLOW));
+      IO.println(DIVIDER);
+      IO.println(Colors.CYAN   + "  [1]" + Colors.WHITE  + "  Previous Year"    + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [2]" + Colors.WHITE  + "  Previous Month"   + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [3]" + Colors.WHITE  + "  Year to Date"     + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [4]" + Colors.WHITE  + "  Month to Date"    + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [5]" + Colors.WHITE  + "  Search by Vendor" + Colors.RESET);
+      IO.println(Colors.CYAN   + "  [6]" + Colors.WHITE  + "  Custom Search"    + Colors.RESET);
+      IO.println(Colors.YELLOW + "  [H]" + Colors.WHITE  + "  Back"             + Colors.RESET);
+      IO.println(THIN_DIV);
+      IO.print(Colors.YELLOW + Colors.BOLD + "  > " + Colors.RESET);
+    }
+
+    //  transaction table
+
+
+    public static void showTransactionTable(List<Transaction> transactions) {
+      IO.println();
+      IO.println(DIVIDER);
+
+        if (transactions.isEmpty()) {
+          IO.println(Colors.colorize("  No transactions found.", Colors.YELLOW));
+          IO.println(DIVIDER);
+            return;
+        }
+
+        // Column headers
+      IO.println(
+                Colors.BOLD + Colors.CYAN +
+                        String.format("  %-12s %-10s %-20s %-16s %s",
+                                "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT") +
+                        Colors.RESET
+        );
+      IO.println(THIN_DIV);
+
+        // Each transaction row
+        for (Transaction t : transactions) {
+            String amountColor = t.getAmount() >= 0 ? Colors.BRIGHT_GREEN : Colors.BRIGHT_RED;
+            String sign        = t.getAmount() >= 0 ? "+" : "";
+
+          IO.println(
+                    Colors.WHITE  + String.format("  %-12s", t.getDate())        +
+                            Colors.DIM    + String.format(" %-10s", t.getTime().format(DateTimeFormatter.ofPattern("HH:mm")))          +
+                            Colors.WHITE  + String.format(" %-20s", t.getDescription())   +
+                            Colors.YELLOW + String.format(" %-16s", t.getVendor())        +
+                            amountColor   + String.format(" %s%.2f", sign, t.getAmount()) +
+                            Colors.RESET
+            );
+        }
+
+      IO.println(THIN_DIV);
+
+        // Summary line
+        double total = transactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+        String totalColor = total >= 0 ? Colors.BRIGHT_GREEN : Colors.BRIGHT_RED;
+      IO.println(
+                Colors.BOLD + "  " +
+                        String.format("%-12s", transactions.size() + " record(s)") +
+                        totalColor +
+                        String.format("%44s%.2f", "NET TOTAL:  ", total) +
+                        Colors.RESET
+        );
+      IO.println(DIVIDER);
+      IO.println();
+    }
+
+    //  terminal prompts
+
+
+    public static void prompt(String label) {
+      IO.print(Colors.CYAN + "  " + label + ": " + Colors.RESET);
+    }
+
+    public static void promptOptional(String label) {
+      IO.print(Colors.DIM + Colors.CYAN + "  " + label +
+                " (leave blank to skip): " + Colors.RESET);
+    }
+
+
+    //  feedback messages
+
+
+    public static void showSuccess(String message) {
+      IO.println();
+      IO.println("  " + Colors.success(message));
+      IO.println();
+    }
+
+    public static void showError(String message) {
+      IO.println();
+      IO.println("  " + Colors.error(message));
+      IO.println();
+    }
+
+    public static void showInfo(String message) {
+      IO.println(Colors.colorize("  " + message, Colors.CYAN));
+    }
+
+    //  section label
+
+
+    public static void showSectionLabel(String label) {
+      IO.println();
+      IO.println(Colors.bold("  ── " + label + " ──", Colors.YELLOW));
+      IO.println();
+    }
+}

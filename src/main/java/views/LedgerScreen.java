@@ -17,80 +17,69 @@ public class LedgerScreen {
         boolean isRunning = true;
 
         while (isRunning) {
-          IO.println("A - All transactions");
-          IO.println("D - Deposits");
-          IO.println("P - Payments");
-          IO.println("r - Reports");
-          IO.println("H - Back to home");
+            Display.showLedgerMenu();
 
             String input = UI.userInputString();
 
             switch (input) {
-                case "a" -> repo.getAll().forEach(System.out::println);
-                case "d" -> repo.getDeposits().forEach(System.out::println);
-                case "p" -> repo.getPayments().forEach(System.out::println);
-                case "r"-> handleReportSearch();
+                case "a" -> Display.showTransactionTable(repo.getAll());
+                case "d" -> Display.showTransactionTable(repo.getDeposits());
+                case "p" -> Display.showTransactionTable(repo.getPayments());
+                case "r"->  handleReportSearch();
                 case "h" -> isRunning = false;
+                default -> Display.showError("Invalid Option, try again");
             }
         }
     }
 
     private void handleReportSearch() {
-      IO.println("Select a search query");
-      IO.println("(1) Previous Year");
-      IO.println("(2) Previous Month");
-      IO.println("(3) Year to Date");
-      IO.println("(4) Month to Date");
-      IO.println("(5) Search by Vendor");
-      IO.println("(6) Custom");
+        boolean isRunning = true;
+        while(isRunning){
+            Display.showReportsMenu();
+            String input = UI.userInputString();
 
-        String input = UI.userInputString();
+            switch (input) {
+                case "1" -> Display.showTransactionTable(repo.previousYear());
+                case "2" -> Display.showTransactionTable(repo.previousMonth());
+                case "3" -> Display.showTransactionTable(repo.yearToDate());
+                case "4" -> Display.showTransactionTable(repo.monthToDate());
+                case "5" -> handleVendorSearch();
+                case "6" -> handleCustomSearch();
+                case "h" -> isRunning = false;
+                default -> Display.showError("Invalid Option, try again");
+            }
 
-        switch (input) {
-            case "1" -> repo.previousYear().forEach(System.out::println);
-            case "2" -> repo.previousMonth().forEach(System.out::println);
-            case "3" -> repo.yearToDate().forEach(System.out::println);
-            case "4" -> repo.monthToDate().forEach(System.out::println);
-            case "5" -> handleVendorSearch();
-            case "6" -> handleCustomSearch();
         }
     }
 
     private void handleVendorSearch() {
-      IO.println("Enter vendor name: ");
+      Display.prompt("Enter Vendor: ");
         String vendor = UI.userInputString();
-        repo.customSearch(vendor, null, null, null, null)
-                .forEach(System.out::println);
+        Display.showTransactionTable(repo.customSearch(vendor, null, null, null, null));
     }
 
     private void handleCustomSearch() {
 
-        IO.println("Vendor (leave blank to skip): ");
+        Display.promptOptional("Vendor");
         String vendor = UI.userInputString();
 
-        IO.println("Description (leave blank to skip): ");
+        Display.promptOptional("Description");
         String desc = UI.userInputString();
 
-        IO.println("Amount (leave blank to skip): ");
+        Display.promptOptional("Amount");
         String amountInput = UI.userInputString();
         Double amount = amountInput.isEmpty() ? null : Double.parseDouble(amountInput);
 
-        IO.println("Start Date (leave blank to skip) :");
+        Display.promptOptional("Start Date");
         String startDateInput = UI.userInputString();
         LocalDate startDate = startDateInput.isEmpty() ? null : LocalDate.parse(startDateInput);
 
-        IO.println("End Date (leave blank to skip) :");
+        Display.promptOptional("End Date");
         String endDateInput = UI.userInputString();
         LocalDate endDate = endDateInput.isEmpty() ? null : LocalDate.parse(endDateInput);
         
 
         // Convert empty string to null so the filter skips it
-        repo.customSearch(
-                vendor.isEmpty() ? null : vendor,
-                desc.isEmpty()   ? null : desc,
-                amount,
-                startDate,
-                endDate
-        ).forEach(System.out::println);
+        Display.showTransactionTable(repo.customSearch(vendor.isEmpty()? null : vendor, desc.isEmpty() ? null : desc, amount, startDate, endDate));
     }
 }

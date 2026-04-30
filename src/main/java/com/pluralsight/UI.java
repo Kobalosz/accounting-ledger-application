@@ -11,9 +11,14 @@ public class UI {
     }
 
     public static Double userInputDouble(){
-        String userInput = scanner.nextLine().strip();
-        Double parsedUserInput = Double.parseDouble(userInput);
-        return parsedUserInput;
+        try{
+            String userInput = scanner.nextLine().strip();
+            Double parsedUserInput = Double.parseDouble(userInput);
+            return parsedUserInput;
+        } catch (NumberFormatException e){
+            IO.println("Invalid response, please enter a number.");
+            return userInputDouble();
+        }
     }
 
 

@@ -1,6 +1,6 @@
 package com.pluralsight;
 
-import com.pluralsight.Transaction;
+import models.Transaction;
 import repository.TransactionRepository;
 import views.HomeScreen;
 

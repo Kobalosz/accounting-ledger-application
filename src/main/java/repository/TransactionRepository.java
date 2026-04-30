@@ -1,6 +1,6 @@
 package repository;
 
-import com.pluralsight.Transaction;
+import models.Transaction;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -100,7 +100,7 @@ public class TransactionRepository {
         return getAll().stream()
                 .filter(transaction -> vendor == null || transaction.getVendor().equalsIgnoreCase(vendor))
                 .filter(transaction -> desc == null || transaction.getDescription().equalsIgnoreCase(desc))
-                .filter(transaction -> amount == null || transaction.getAmount() == amount.doubleValue())
+                .filter(transaction -> amount == null || Double.compare(transaction.getAmount(), amount) == 0)
                 .filter(transaction -> startDate == null || !transaction.getDate().isBefore(startDate))
                 .filter(transaction -> endDate == null || !transaction.getDate().isAfter(endDate))
                 .collect(Collectors.toCollection(ArrayList::new));
