@@ -57,4 +57,10 @@ public class Transaction {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+//    Ran into a problem displaying the information so I had to create a method
+    @Override
+    public String toString(){
+        return date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
+    }
 }

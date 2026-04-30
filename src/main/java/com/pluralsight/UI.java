@@ -11,7 +11,7 @@ public class UI {
     }
 
     public static Double userInputDouble(){
-        String userInput = scanner.nextLine().strip().toLowerCase();
+        String userInput = scanner.nextLine().strip();
         Double parsedUserInput = Double.parseDouble(userInput);
         return parsedUserInput;
     }

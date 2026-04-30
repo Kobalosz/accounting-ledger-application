@@ -2,15 +2,13 @@ package repository;
 
 import com.pluralsight.Transaction;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +16,7 @@ public class TransactionRepository {
     public List<Transaction> getAll(){
         List<Transaction> transactions = new ArrayList<>();
 //        Using this method to close my reader a bit more efficiently (I didn't want to write a finally block)
-        try(BufferedReader reader = new BufferedReader(new FileReader("../transactions.csv"))){
+        try(BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))){
             String line = reader.readLine();
             line = reader.readLine();
             while(line != null){
@@ -39,8 +37,24 @@ public class TransactionRepository {
             e.printStackTrace();
         }
 
-        return transactions;
+//        Initially I had just done transactions.reversed() to get the most recent entry, but then I realized that just because it is the most recent entry doesn't mean that it is the latest transaction
+        return transactions.stream().sorted(Comparator.comparing(Transaction::getDate).thenComparing(Transaction::getTime).reversed()).toList();
     }
+
+    public void save(Transaction transaction){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv", true))){
+            writer.write(transaction.getDate().toString() + "|" +
+                    transaction.getTime() + "|" +
+                    transaction.getDescription() + "|" +
+                    transaction.getVendor() + "|" +
+                    transaction.getAmount()
+                    );
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public List<Transaction>  getDeposits(){
         return getAll().stream().filter(transaction -> transaction.getAmount()>0).collect(Collectors.toCollection(ArrayList::new));
