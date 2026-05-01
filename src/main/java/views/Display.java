@@ -172,16 +172,4 @@ public class Display {
       IO.println();
     }
 
-    public static void showInfo(String message) {
-      IO.println(Colors.colorize("  " + message, Colors.CYAN));
-    }
-
-    //  section label
-
-
-    public static void showSectionLabel(String label) {
-      IO.println();
-      IO.println(Colors.bold("  ── " + label + " ──", Colors.YELLOW));
-      IO.println();
-    }
 }
