@@ -15,6 +15,7 @@ public class TransactionRepository {
     public List<Transaction> getAll(){
         List<Transaction> transactions = new ArrayList<>();
 //        Using this method to close my reader a bit more efficiently (I didn't want to write a finally block)
+//        Learned this is called "Try with resources" on Baeldung
         try(BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))){
             String line = reader.readLine();
             line = reader.readLine();

@@ -3,14 +3,12 @@ package views;
 import models.Transaction;
 import com.pluralsight.UI;
 import repository.TransactionRepository;
-import util.Colors;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class HomeScreen {
 
-    // Holds a reference to whatever was injected
+    // Holds a reference to whatever was injected, in this case the repository!
     private TransactionRepository repo;
 
     // This is a constructor to inject the repository
